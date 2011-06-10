@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <link type="text/css" rel="stylesheet" media="screen" href="jqtouch/jqtouch.css"> 
+   <link type="text/css" rel="stylesheet" media="screen" href="themes/jqt/theme.css">
+	<script type="text/javascript" src="jqtouch/jquery.js"></script>
+	<script type="text/javascript" src="jqtouch/jqtouch.js"></script>
+    <script type="text/javascript" src="gymtime.js"></script>
+
+	<meta charset="utf-8" />
+  <title>GymTi.me</title>
+</head>
+<body>
+	<div id="home">
+		<div class="toolbar">
+			<h1>Gymti.me</h1>
+			<a class="button flip" href="#settings">Settings</a>
+		</div>
+		<ul class="edgetoedge">
+			<li class="arrow"><a href="#about">About</a></li>
+			<li class="arrow"><a href="#workouts">Workouts</a></li>
+		</ul>
+	</div>
+	
+	<div id="about">
+		<div class="toolbar"> 
+			<h1>About</h1>
+			<a class="button back" href="#">Back</a>
+		</div>
+		<div>
+			<p> Gymti.me is a simple app to help you keep track of your workouts and your routines
+			</p>
+		</div>
+	</div>
+	<div id="workouts"> 
+		<div class="toolbar">
+			<h1>Workouts</h1>
+			<a class="button back" href="#">Back</a> 
+			<a class="button slideup" href="#createWorkout">+</a>
+			
+		</div>
+			<ul class="edgetoedge">
+				<li id="entryTemplateWorkout" class="entry"> 
+					<span class="label">Label</span> 
+					<span class="time">000</span> 
+					<span class="delete">Delete</span>
+				</li>
+			</ul>
+			
+			<ul class="edgetoedge">
+				<li class="arrow"><a id="0" href="#workout">P90 Hard</a></li>
+				<li class="arrow"><a id="1" href="#workout">Abs & Core</a></li>
+			</ul>
+		
+		</div>
+
+	<div id="workout"> 
+		<div class="toolbar">
+			<h1>Workout</h1> 
+			<a class="button back" href="#">Back</a> 
+			<a class="button slideup" href="#createWorkout">edit</a>
+		</div>
+		<ul class="edgetoedge">
+			<li id="entryTemplate" class="entry" style="display:none"> 
+				<span class="exercise">Label</span> 
+				<span class="time">000</span> 
+				<span class="delete">Delete</span>
+			</li>
+		</ul>
+	</div>
+
+	<div id="createWorkout"> 
+		<div class="toolbar">
+			<h1>New Workout</h1>
+			<a class="button cancel" href="#">Cancel</a> 
+		</div>
+		<form method="post">
+			<ul>
+				<li><input type="text" placeholder="Exercise" name="exercise" id="exercise" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
+				<li><input type="text" placeholder="Time" name="time" id="time" autocapitalize="off" autocorrect="off" autocomplete="off" /></li>
+				<li><input type="submit" class="submit" name="action" value="Save Workout" /></li>
+			</ul
+		</form>
+	</div>
+	
+	<div id="settings"> 
+		<div class="toolbar">
+			<h1>Settings</h1>
+			<a class="button cancel" href="#">Cancel</a> 
+		</div>
+		<form method="post"> 
+			<ul>
+		<li><input placeholder="Age" type="text" name="age" id="age" /></li> <li><input placeholder="Weight" type="text" name="weight" id="weight" /></li> 
+		<li><input placeholder="Budget" type="text" name="budget" id="budget" /></li> <li><input type="submit" class="submit" name="action" value="Save Changes" /></li>
+			</ul> 
+		</form>
+	</div>
+</body>
+</html>
