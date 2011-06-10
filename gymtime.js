@@ -5,13 +5,14 @@
 	
 	
 	var db
+	var workoutID
 	$(document).ready(function(){ 
 		$('#createWorkout form').submit(createWorkout);
 		$('#settings form').submit(saveSettings);
 		$('#settings').bind('pageAnimationStart', loadSettings);
 		$('#workouts li a').click(function(){
-			//	var workoutID = this.id; 
-			//var workout = new Date(); 
+			workoutID = this.id; 
+			refreshEntries();
 		});
 		var shortName = 'gymtime';
 		var version = '1.0';
@@ -69,23 +70,29 @@
 		//var currentDate = sessionStorage.currentDate; 
 		//$('#date h1').text(currentDate);
 		//$('#date ul li:gt(0)').remove();
+		//
+		
+		//
+		alert(workoutID);
+	    $('#exercise ul li:gt(0)').remove();
 		db.transaction(
 			function(transaction) {
 				transaction.executeSql(
-					'SELECT * FROM entries;',
-					[],
+					'SELECT * FROM entries WHERE id=?;',
+					[workoutID],
 					function (transaction, result) {
 						
 						for (var i=0; i < result.rows.length; i++) {
 							var row = result.rows.item(i); 
-							var newEntryRow = $('#entryTemplateWorkout').clone(); 
+							var newEntryRow = $('#entryTemplate').clone(); 
 							newEntryRow.removeAttr('id'); 
 							newEntryRow.removeAttr('style'); 
-							//newEntryRow.data('entryId', row.id); 
+							newEntryRow.data('entryId', row.id); 
 							newEntryRow.appendTo('#exercise ul'); 
-							//newEntryRow.find('.label').text(row.exercise); 
+							newEntryRow.find('.label').text(row.exercise); 
 							//newEntryRow.find('.time').text(row.time);
-							//alert(row.exercise);
+							$('#workout h1').text(row.exercise);
+							//$('#entryTemplate').removeAttr('style'); 
 							
 						}
 						
