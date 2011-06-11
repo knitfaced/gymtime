@@ -73,8 +73,7 @@
 		//
 		
 		//
-		alert(workoutID);
-	    $('#exercise ul li:gt(0)').remove();
+	    $('#workout ul li:gt(0)').remove();
 		db.transaction(
 			function(transaction) {
 				transaction.executeSql(
@@ -88,9 +87,9 @@
 							newEntryRow.removeAttr('id'); 
 							newEntryRow.removeAttr('style'); 
 							newEntryRow.data('entryId', row.id); 
-							newEntryRow.appendTo('#exercise ul'); 
+							newEntryRow.appendTo('#workout ul'); 
 							newEntryRow.find('.label').text(row.exercise); 
-							//newEntryRow.find('.time').text(row.time);
+							newEntryRow.find('.time').text(row.time);
 							$('#workout h1').text(row.exercise);
 							//$('#entryTemplate').removeAttr('style'); 
 							
