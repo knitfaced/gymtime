@@ -6,13 +6,13 @@
 	
 	var db
 	var workoutID
-	$(document).ready(function(){ 
+	$(document).ready(function(){
 		$('#createWorkout form').submit(createWorkout);
 		$('#settings form').submit(saveSettings);
 		$('#settings').bind('pageAnimationStart', loadSettings);
 		$('#workouts li a').click(function(){
 			workoutID = this.id; 
-			refreshEntries();
+			refreshWorkout();
 		});
 		var shortName = 'gymtime';
 		var version = '1.0';
@@ -29,7 +29,7 @@
 				);
 			}
 		);
-		
+	refreshWorkouts();	
 	});
 	
 	function loadSettings() {
@@ -56,7 +56,7 @@
 					'INSERT INTO entries (exercise, time) VALUES (?, ?);',
 					[exercise, time],
 					function(){
-						refreshEntries();
+						refreshWorkouts();
 						jQT.goBack();
 					},
 					errorHandler
@@ -66,13 +66,7 @@
 		return false;
 	}
 	
-	function refreshEntries() { 
-		//var currentDate = sessionStorage.currentDate; 
-		//$('#date h1').text(currentDate);
-		//$('#date ul li:gt(0)').remove();
-		//
-		
-		//
+	function refreshWorkout() { 
 	    $('#workout ul li:gt(0)').remove();
 		db.transaction(
 			function(transaction) {
@@ -100,6 +94,52 @@
 				);
 			}
 		)
+	}
+	
+	
+	function buildURL(){
+	
+	}
+	
+	function refreshWorkouts() { 
+	    $('#workouts ul li:gt(0)').remove();
+		db.transaction(
+			function(transaction) {
+				transaction.executeSql(
+					'SELECT * FROM entries;',
+					[],
+					function (transaction, result) {
+						for (var i=0; i < result.rows.length; i++) {
+							var row = result.rows.item(i); 
+							var linkURL = "<a id=\"" + row.id + "\"" + " href=\"#workout\">" + row.exercise + "</a>"
+							var newEntryRow = $('#entryTemplateWorkout').clone(); 
+							newEntryRow.removeAttr('id'); 
+							newEntryRow.removeAttr('style'); 
+							newEntryRow.data('entryId', row.id); 
+							newEntryRow.appendTo('#workouts ul'); 
+							newEntryRow.find('.label').html(linkURL); 
+							newEntryRow.find('.time').text(row.time);
+							newEntryRow.find('.delete').click(function(){ 
+								var clickedEntry = $(this).parent(); 
+								var clickedEntryId = clickedEntry.data('entryId'); 
+								deleteEntryById(clickedEntryId); clickedEntry.slideUp();
+							});			
+						}
+						
+					},
+					errorHandler
+				);
+			}
+		)
+	}
+	
+	function deleteEntryById(id) { 
+		db.transaction(
+			function(transaction) {
+				transaction.executeSql('DELETE FROM entries WHERE id=?;',
+				[id], null, errorHandler);
+			}
+		);
 	}
 	
 	function errorHandler(transaction, error) { 

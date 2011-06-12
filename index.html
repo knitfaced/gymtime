@@ -3,6 +3,7 @@
 <head>
    <link type="text/css" rel="stylesheet" media="screen" href="jqtouch/jqtouch.css"> 
    <link type="text/css" rel="stylesheet" media="screen" href="themes/jqt/theme.css">
+	<link type="text/css" rel="stylesheet" media="screen" href="gymtime.css">
 	<script type="text/javascript" src="jqtouch/jquery.js"></script>
 	<script type="text/javascript" src="jqtouch/jqtouch.js"></script>
     <script type="text/javascript" src="gymtime.js"></script>
@@ -40,17 +41,14 @@
 			
 		</div>
 			<ul class="edgetoedge">
-				<li id="entryTemplateWorkout" class="entry"> 
+				<li id="entryTemplateWorkout" class="entry" style="display:none"> 
 					<span class="label">Label</span> 
 					<span class="time">000</span> 
 					<span class="delete">Delete</span>
 				</li>
 			</ul>
 			
-			<ul class="edgetoedge">
-				<li class="arrow"><a id="0" href="#workout">P90 Hard</a></li>
-				<li class="arrow"><a id="1" href="#workout">Abs & Core</a></li>
-			</ul>
+
 		
 		</div>
 
@@ -58,7 +56,7 @@
 		<div class="toolbar">
 			<h1>Workout</h1> 
 			<a class="button back" href="#">Back</a> 
-			<a class="button slideup" href="#createWorkout">edit</a>
+			<a class="button slideup" href="#createWorkoutPart">+</a>
 		</div>
 		<ul class="edgetoedge">
 			<li id="entryTemplate" class="entry" style="display:none"> 
