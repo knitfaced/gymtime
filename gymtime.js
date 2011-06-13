@@ -8,12 +8,13 @@
 	var workoutID
 	$(document).ready(function(){
 		$('#createWorkout form').submit(createWorkout);
+		$('#createWorkoutPart form').submit(createWorkoutPart);
 		$('#settings form').submit(saveSettings);
 		$('#settings').bind('pageAnimationStart', loadSettings);
-		$('#workouts li a').click(function(){
-			workoutID = this.id; 
-			refreshWorkout();
-		});
+		//$('#workouts li a').click(function(){
+		//	workoutID = this.id; 
+		//	refreshWorkout();
+		//});
 		var shortName = 'gymtime';
 		var version = '1.0';
 		var displayName = 'gymtime';
@@ -63,7 +64,6 @@
 		// var date = sessionStorage.currentDate;
 		var exercise = $('#exercise').val();
 		var time = $('#time').val();
-		var workoutpart = "empty"
 		db.transaction(
 			function(transaction) {
 				transaction.executeSql(
@@ -79,9 +79,26 @@
 		);
 		return false;
 	}
-	
+	function createWorkoutPart() {
+		var workoutpart = $('#workoutpart').val();
+		var time = $('#timewp').val();
+		db.transaction(
+			function(transaction) {
+				transaction.executeSql(
+					'INSERT INTO workoutparts (workoutpart, time) VALUES (?, ?);',
+					[workoutpart, time],
+					function(){
+						refreshWorkout();
+						jQT.goBack();
+					},
+					errorHandler
+				);
+			}
+		);
+		return false;
+	}
 	function refreshWorkout() { 
-	    alert(workoutID);
+		alert (workoutID);
 		$('#workout ul li:gt(0)').remove();
 		db.transaction(
 			function(transaction) {
@@ -99,7 +116,7 @@
 							newEntryRow.appendTo('#workout ul'); 
 							newEntryRow.find('.label').text(row.exercise); 
 							newEntryRow.find('.time').text(row.time);
-							$('#workout h1').text(row.exercise);
+							$('#workout h1').text("asasasa");
 							//$('#entryTemplate').removeAttr('style'); 
 							
 						}
@@ -110,11 +127,7 @@
 			}
 		)
 	}
-	
-	
-	function buildURL(){
-	
-	}
+
 	
 	function refreshWorkouts() { 
 	    $('#workouts ul li:gt(0)').remove();
@@ -132,7 +145,11 @@
 							newEntryRow.removeAttr('style'); 
 							newEntryRow.data('entryId', row.id); 
 							newEntryRow.appendTo('#workouts ul'); 
-							newEntryRow.find('.label').html(linkURL); 
+							newEntryRow.find('.label').html(linkURL).click(function(){ 
+								workoutID = row.id;
+								refreshWorkout();
+								}); 
+							
 							newEntryRow.find('.time').text(row.time);
 							newEntryRow.find('.delete').click(function(){ 
 								var clickedEntry = $(this).parent(); 
