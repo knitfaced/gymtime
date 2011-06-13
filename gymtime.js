@@ -25,11 +25,24 @@
 					'CREATE TABLE IF NOT EXISTS entries ' +
 					' (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ' +
 					'	exercise TEXT NOT NULL, ' +
+					' time INTEGER NOT NULL );' 
+				);
+			}
+		);		
+		db.transaction(
+			function(transaction) {
+				transaction.executeSql(
+					'CREATE TABLE IF NOT EXISTS workoutparts ' +
+					' (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ' +
+					'	workoutpart TEXT NOT NULL, ' +
+					'	exerciseID INTEGER NOT NULL, ' +
+					'	runningorder INTEGER NOT NULL, ' +
 					' time INTEGER NOT NULL );'
 				);
 			}
-		);
-	refreshWorkouts();	
+		);		
+		refreshWorkouts();	
+		
 	});
 	
 	function loadSettings() {
@@ -50,6 +63,7 @@
 		// var date = sessionStorage.currentDate;
 		var exercise = $('#exercise').val();
 		var time = $('#time').val();
+		var workoutpart = "empty"
 		db.transaction(
 			function(transaction) {
 				transaction.executeSql(
@@ -67,11 +81,12 @@
 	}
 	
 	function refreshWorkout() { 
-	    $('#workout ul li:gt(0)').remove();
+	    alert(workoutID);
+		$('#workout ul li:gt(0)').remove();
 		db.transaction(
 			function(transaction) {
 				transaction.executeSql(
-					'SELECT * FROM entries WHERE id=?;',
+					'SELECT * FROM workoutparts WHERE exerciseID=?;',
 					[workoutID],
 					function (transaction, result) {
 						
@@ -123,6 +138,8 @@
 								var clickedEntry = $(this).parent(); 
 								var clickedEntryId = clickedEntry.data('entryId'); 
 								deleteEntryById(clickedEntryId); clickedEntry.slideUp();
+								refreshWorkout();	
+								
 							});			
 						}
 						
