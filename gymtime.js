@@ -78,15 +78,14 @@
 		);
 		return false;
 	}
-	function createWorkoutPart(clickedEntryID) {
+	function createWorkoutPart() {
 		var workoutpart = $('#workoutpart').val();
 		var timewp = $('#timewp').val();
-		alert (clickedEntryID);
 		db.transaction(
 			function(tx) {
 				tx.executeSql(
 					'INSERT INTO workoutparts (workoutpart, timewp, exerciseID) VALUES (?, ?, ?);',
-					[workoutpart, timewp, clickedEntryID],
+					[workoutpart, timewp, workoutID],
 					function(){
 						refreshWorkout();
 						jQT.goBack();
@@ -97,14 +96,15 @@
 		);
 		return false;
 	}
-	function refreshWorkout(clickedEntryID) { 
+	function refreshWorkout() { 
 		$('#workout ul li:gt(0)').remove();
-		$('#workout h1').text(clickedEntryID);
+		$('#workout h1').text(workoutID);
+		alert (workoutID);
 		db.transaction(
 			function(transaction) {
 				transaction.executeSql(
 					'SELECT * FROM workoutparts WHERE exerciseID=?;',
-					[clickedEntryID],
+					[workoutID],
 					function (transaction, result) {
 						
 						for (var i=0; i < result.rows.length; i++) {
@@ -146,18 +146,16 @@
 							newEntryRow.data('entryId', row.id); 
 							newEntryRow.appendTo('#workouts ul'); 
 							newEntryRow.find('.label').html(linkURL).click(function(){ 
-								var clickedEntry = $(this).parent(); 
-								var clickedEntryID = clickedEntry.data('entryId');												
-							    refreshWorkout(clickedEntryID);
-								//workoutID = row.id
-								//refreshWorkout();
+												
+//							    workoutID = row.id
+//								refreshWorkout();
 								}); 
 							
 							newEntryRow.find('.time').text(row.time);
 							newEntryRow.find('.delete').click(function(){ 
 								var clickedEntry = $(this).parent(); 
-								var clickedEntryID = clickedEntry.data('entryId'); 
-								deleteEntryById(clickedEntryID); clickedEntry.slideUp();
+								var clickedEntryId = clickedEntry.data('entryId'); 
+								deleteEntryById(clickedEntryId); clickedEntry.slideUp();
 								refreshWorkout();	
 								
 							});			
