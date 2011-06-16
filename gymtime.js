@@ -116,6 +116,7 @@ function refreshWorkout(clickedEntryID) {
 						newEntryRow.appendTo('#workout ul'); 
 						newEntryRow.find('.label').text(row.workoutpart); 
 						newEntryRow.find('.time').text(row.timewp);
+						newEntryRow.data('.workoutID').text(row.workoutID);
 						
 						//$('#entryTemplate').removeAttr('style'); 
 						
