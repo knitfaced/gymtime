@@ -25,8 +25,7 @@ $(document).ready(function(){
 			transaction.executeSql(
 				'CREATE TABLE IF NOT EXISTS entries ' +
 				' (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ' +
-				'	exercise TEXT NOT NULL, ' +
-				' time INTEGER NOT NULL );' 
+				'	exercise TEXT NOT NULL);' 
 			);
 		}
 	);		
@@ -62,12 +61,12 @@ function saveSettings() {
 function createWorkout() {
 	// var date = sessionStorage.currentDate;
 	var exercise = $('#exercise').val();
-	var time = $('#time').val();
+	//var time = $('#time').val();
 	db.transaction(
 		function(transaction) {
 			transaction.executeSql(
-				'INSERT INTO entries (exercise, time) VALUES (?, ?);',
-				[exercise, time],
+				'INSERT INTO entries (exercise) VALUES (?);',
+				[exercise],
 				function(){
 					refreshWorkouts();
 					jQT.goBack();
@@ -120,7 +119,6 @@ function refreshWorkout(clickedEntryID, ClickedEntryName) {
 						newEntryRow.find('.time').text(row.timewp);
 						newEntryRow.find('.delete').click(function(){ 
 							var clickedWorkoutPart = $(this).parent(); 
-
 							var clickedWorkoutPartID = clickedWorkoutPart.data('entryId'); 
 							deleteWorkoutPartById(clickedWorkoutPartID); 
 							refreshWorkout(clickedEntryID);
@@ -162,6 +160,12 @@ function refreshWorkouts() {
 							}); 
 						
 						newEntryRow.find('.time').text(row.time);
+						newEntryRow.find('.go').html(linkURL).click(function(){ 
+							var clickedEntry = $(this).parent(); 
+							var clickedEntryID = clickedEntry.data('entryId');												
+							var ClickedEntryName = clickedEntry.data('exercise');					    	
+							doworkout(clickedEntryID, ClickedEntryName);
+						});			
 						newEntryRow.find('.delete').click(function(){ 
 							var clickedEntry = $(this).parent(); 
 							var clickedEntryID = clickedEntry.data('entryId'); 
@@ -176,6 +180,9 @@ function refreshWorkouts() {
 			);
 		}
 	)
+}
+
+function doworkout(){
 }
 
 function deleteEntryById(id) { 
