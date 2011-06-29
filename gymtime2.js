@@ -4,18 +4,21 @@ var jQT = $.jQTouch({
 });
 
 
-var db;
-var workoutID;
+var db
+var workoutID
 $(document).ready(function () {
     $('#createWorkout form').submit(createWorkout);
     $('#createWorkoutPart form').submit(createWorkoutPart);
     $('#settings form').submit(saveSettings);
     $('#settings').bind('pageAnimationStart', loadSettings);
-    var shortName, version, displayName, maxSize;
-    shortName = 'gymtime';
-    version = '1.0';
-    displayName = 'gymtime';
-    maxSize = 65536;
+    //$('#workouts li a').click(function(){
+    //	workoutID = this.id; 
+    //	refreshWorkout();
+    //});
+    var shortName = 'gymtime';
+    var version = '1.0';
+    var displayName = 'gymtime';
+    var maxSize = 65536;
     db = openDatabase(shortName, version, displayName, maxSize);
     db.transaction(
 
@@ -26,13 +29,10 @@ $(document).ready(function () {
 
     function (transaction) {
         transaction.executeSql('CREATE TABLE IF NOT EXISTS workoutparts ' + ' (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ' + '	workoutpart TEXT NOT NULL, ' + '	exerciseID INTEGER NOT NULL, ' + ' timewp INTEGER NOT NULL );');
-
     });
     refreshWorkouts();
 
 });
-
-
 
 function loadSettings() {
     $('#age').val(localStorage.age);
@@ -149,42 +149,35 @@ function refreshWorkouts() {
                     deleteEntryById(clickedEntryID);
                     clickedEntry.slideUp();
                     refreshWorkout();
-
-                });
-            }
-
-        }, errorHandler);
-    })
+							
+						});			
+					}
+					
+				},
+				errorHandler
+			);
+		}
+	)
 }
 
-function doworkout(clickedEntryID, ClickedEntryName) {
-    $('#doworkout h1').text(ClickedEntryName);
-    db.transaction(
-
-    function (transaction, result) {
-        transaction.executeSql('SELECT * FROM workoutparts WHERE exerciseID=?;', [clickedEntryID], function (transaction, result) {
- 
-           for (var i = 0; i < result.rows.length; i++) {
-                var row, countdown;
-                row = result.rows.item(i);
-                countdown_number = row.timewp;
-                $('div.workoutbox').html(row.workoutpart + ' ' + '(' + ClickedEntryName + ')');
-                $('div#countdown_text').html(countdown_number);
-                countdown_trigger();
-                function countdown_trigger() {
-                    alert(countdown_number);                    
-                    if (--countdown_number > 0) {
-                        $('div#countdown_text').html(countdown_number);
-                        setTimeout(function(){countdown_trigger()}, 1000);         
-                    }
-                    else{
-                        $('div#countdown_text').html("Done");
-                    }
-                }
-            }
-
-        }, errorHandler);
-    })
+function doworkout(clickedEntryID, ClickedEntryName){
+	$('#doworkout h1').text(ClickedEntryName);
+	db.transaction(
+		function(transaction) {
+			transaction.executeSql(
+				'SELECT * FROM workoutparts WHERE exerciseID=?;',
+				[clickedEntryID],
+				function (transaction, result) {
+					for (var i=0; i < result.rows.length; i++) {
+						var row = result.rows.item(i); 
+                        $('div.workoutbox').text(row.workoutpart);
+                     
+					}		
+				},
+				errorHandler
+			);
+		}
+	)
 }
 
 

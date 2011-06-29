@@ -6,6 +6,9 @@ position: relative;
 	color: #FF33FF; 
 	text-shadow: rgba(0,0,0,.7) 0 1px 2px;
 } 
+.idvalue {
+display: none;
+}
 
 #workouts ul li .delete {
 position: absolute; 
@@ -49,4 +52,8 @@ line-height: 30px;
 padding: 0 3px; 
 border-width: 0 5px; 
 -webkit-border-image: url(themes/jqt/img/button.png) 0 5 0 5;
+}
+
+#workout ul li .time {
+font-size: 10px
 }
