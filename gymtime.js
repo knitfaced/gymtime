@@ -163,26 +163,44 @@ function doworkout(clickedEntryID, ClickedEntryName) {
 
     function (transaction, result) {
         transaction.executeSql('SELECT * FROM workoutparts WHERE exerciseID=?;', [clickedEntryID], function (transaction, result) {
- 
-           for (var i = 0; i < result.rows.length; i++) {
-                var row, countdown;
-                row = result.rows.item(i);
-                countdown_number = row.timewp;
-                $('div.workoutbox').html(row.workoutpart + ' ' + '(' + ClickedEntryName + ')');
-                $('div#countdown_text').html(countdown_number);
-                countdown_trigger();
-                function countdown_trigger() {
-                    alert(countdown_number);                    
-                    if (--countdown_number > 0) {
-                        $('div#countdown_text').html(countdown_number);
-                        setTimeout(function(){countdown_trigger()}, 1000);         
-                    }
-                    else{
-                        $('div#countdown_text').html("Done");
-                    }
-                }
-            }
 
+					//the index of the current workout in the database result.rows array 
+					var current_workout_part_index = 0;
+
+					//the database row object
+					var row;
+					
+					var countdown_number;
+
+					move_to_next_workout_part();
+          countdown_trigger();
+
+          function countdown_trigger() {							
+							$('div.workoutbox').html(row.workoutpart + ' ' + '(' + ClickedEntryName + ')');                  
+							$('#countdown_text').html(countdown_number);
+                    
+							//decrement and check we are still in same workout part							
+							if (countdown_number-- >= 0) {
+									//if so, delay one second then recursively call self to check again                    
+                  setTimeout(function(){countdown_trigger()}, 1000);       
+              }
+              else{
+									//we've finished this workout part
+                  $('#countdown_text').html("Done");
+
+									//check if there are more workout parts to do, if so countdown
+									if (current_workout_part_index++ < result.rows.length) {
+										move_to_next_workout_part();
+										countdown_trigger();
+									}
+              }
+          }
+
+					//reset the countdown to the maximum value, as saved in the database
+					function move_to_next_workout_part() {
+							row = result.rows.item(current_workout_part_index);
+							countdown_number = row.timewp;
+					}
         }, errorHandler);
     })
 }
